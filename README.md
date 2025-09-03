@@ -151,12 +151,12 @@ bun create next-app@latest
 
 * 프로젝트 규모가 커질수록 유지보수에 유리
 
-# Next.js와 `eslint.config.mjs`
+### Next.js와 `eslint.config.mjs`
 
 * Next.js 14 이후로는 ESLint 9 호환성과 최신 권장 방식을 고려해 `eslint.config.mjs` 사용하는 방향으로 전환하고 있음
 
 * 기존 `.eslintrc.json`도 여전히 지원되므로 필요 시 수동으로 만들어 사용하거나 점진적으로 마이그레이션하실 수 있음
-```json
+```
 // .eslintrc.json
 {
   "extends": "next",
@@ -165,7 +165,7 @@ bun create next-app@latest
   }
 }
 ```
-```js
+```
 // eslint.config.mjs
 import next from "eslint-config-next";
 
