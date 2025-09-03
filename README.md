@@ -86,3 +86,79 @@ import { Button } from 'components/button'
 * import alias(선택): `tsconfig.json`에 "paths" 자동 생성
 
 * 수동으로 프로젝트를 만들 때 추가로 해야 하는 작업들을 자동으로 처리해줌
+
+### Core Web Vitals
+
+* **LCP (Largest Contentful Paint)**: 뷰포트 내에서 가장 큰 페이지 요소(큰 텍스트 블록, 이미지 또는 비디오)를 표시하는 데 걸리는 시간
+    - 뷰포트: 웹페이지 사용자가 별도의 스크롤 동작 없이 볼 수 있는 영역
+
+* **FID (First Input Delay)**: 사용자가 웹페이지와 상호작용을 시도한 첫 순간부터 페이지가 실제로 응답하기까지의 시간
+
+* **CLS (Cumulative Layout Shift)**: 방문자에게 콘텐츠가 얼마나 불안정하게 보이는지를 측정하는 지표 페이지에서 갑작스런 레이아웃 변경이 얼마나 발생하는지(레이아웃 이동, layout shift의 빈도/규모)를 측정
+
+### 실습에 사용할 프로젝트를 생성
+
+* 공식 문서에서는 기본 패키지 관리자로 pnpm을 사용
+* 원하시는 패키지 관리자 탭을 클릭하면 각자의 설치/생성 명령을 확인하실 수 있음
+* 아래 명령으로 프로젝트를 생성
+* 명령을 실행하면 아래와 같은 8개의 선택 항목이 나옴
+```bash
+# npm
+npx create-next-app@latest
+
+# pnpm
+pnpm dlx create-next-app@latest
+
+# yarn
+yarn create next-app
+
+# bun
+bun create next-app@latest
+```
+
+### 선택 항목 (8가지)
+
+1. 프로젝트 이름을 입력
+2. TypeScript 사용 여부를 선택
+3. ESLint 사용 여부를 선택
+4. Tailwind CSS 사용 여부를 선택
+5. src/ 디렉터리 사용 여부를 선택
+6. App Router를 사용할지 선택
+7. import alias를 사용할지 선택
+8. alias 문자열을 지정 (기본값: @/)
+
+### .eslintrc.json vs eslint.config.mjs
+
+* JSON(.eslintrc.json)은 주석, 변수, 조건문을 사용할 수 없어 복잡한 규칙 구성에 제약이 있음
+* mjs는 ESLint가 새롭게 도입한 ESM(ECMAScript 모듈) 기반 구성 방식
+* 확장자 .mjs는 "module JavaScript"를 뜻 
+* ESLint v9 이상 권장 방식이며 코드처럼 변수/함수/조건문을 활용해 유연하게 설정할 수 있음
+* 여러 구성 파일을 임포트해서 재사용/모듈화하기 쉬움
+* 프로젝트 규모가 커질수록 유지보수에 유리
+
+# Next.js와 `eslint.config.mjs`
+
+* Next.js 14 이후로는 ESLint 9 호환성과 최신 권장 방식을 고려해 `eslint.config.mjs` 사용으로 전환하고 있음
+* 기존 `.eslintrc.json`도 여전히 지원되므로 필요 시 수동으로 만들어 사용하거나 점진적으로 마이그레이션하실 수 있음
+```json
+// .eslintrc.json
+{
+  "extends": "next",
+  "rules": {
+    "no-console": "warn"
+  }
+}
+```
+```js
+// eslint.config.mjs
+import next from "eslint-config-next";
+
+export default [
+  next(),
+  {
+    rules: {
+      "no-console": "warn",
+    },
+  },
+];
+```
