@@ -1,5 +1,132 @@
 # 202030225 이동민 
 
+## 2025-09-10
+
+### Folder and file conventions (폴더 및 파일 규칙)
+
+### 최상위 폴더 (Top-level folders)
+
+* 최상위 폴더는 애플리케이션의 코드와 정적 자산을 구성하는 데 사용
+
+### Folder and file conventions (폴더 및 파일 규칙)
+
+### 최상위 파일 (Top-level files)
+
+* 최상위 파일은 애플리케이션 구성, 종속성 관리, 미들웨어 실행, 모니터링 도구 통합, 환경 변수 정의에 사용
+
+### 동적 라우팅 (Dynamic routes)
+
+| 문법 | 설명 (한글) | 설명 (영문) |
+|------|-------------|-------------|
+| `[folder]`     | 동적 라우팅 세그먼트 | Dynamic route segment |
+| `[...folder]`  | 포괄 라우팅 세그먼트 | Catch-all route segment |
+| `[[...folder]]`| 선택 가능한 포괄 라우팅 세그먼트 | Optional catch-all route segment |
+
+---
+
+### 라우팅 그룹 및 비공개 폴더 (Route Groups and private folders)
+
+| 문법 | 설명 (한글) | 설명 (영문) |
+|------|-------------|-------------|
+| `(folder)` | 라우팅에 영향을 주지 않고 그룹화 | Group routes without affecting routing |
+| `_folder`  | 해당 폴더 및 자식 세그먼트 라우팅에서 제외 | Opt folder and all child segments out of routing |
+
+---
+
+### 병렬 및 차단 라우팅 (Parallel and Intercepted Routes)
+
+| 문법 | 설명 (한글) | 설명 (영문) |
+|------|-------------|-------------|
+| `@folder`     | 명명된 슬롯 | Named slot |
+| `(.)folder`   | 동일 레벨에서 가로채기 | Intercept same level |
+| `(..)folder`  | 한 레벨 위에서 가로채기 | Intercept one level above |
+| `(..)(..)folder` | 두 레벨 위에서 가로채기 | Intercept two levels above |
+| `(...)folder` | 루트에서 가로채기 | Intercept from root |
+
+# Folder and file conventions (폴더 및 파일 규칙)
+
+## 메타데이터 파일 규칙 (Metadata file conventions)
+
+### 앱 아이콘 (App icons)
+
+| 파일명 | 확장자 | 설명 (한글) | 설명 (영문) |
+|--------|--------|-------------|-------------|
+| `favicon`      | .ico | 파비콘 파일 | Favicon file |
+| `icon`         | .ico .jpg .jpeg .png .svg | 앱 아이콘 파일 | App Icon file |
+| `icon`         | .js .ts .tsx | 생성된 앱 아이콘 | Generated App Icon |
+| `apple-icon`   | .jpg .jpeg .png | Apple 앱 아이콘 파일 | Apple App Icon file |
+| `apple-icon`   | .js .ts .tsx | 생성된 Apple 앱 아이콘 | Generated Apple App Icon |
+
+---
+
+### Open Graph 및 Twitter 이미지 (Open Graph and Twitter images)
+
+| 파일명 | 확장자 | 설명 (한글) | 설명 (영문) |
+|--------|--------|-------------|-------------|
+| `opengraph-image` | .jpg .jpeg .png .gif | Open Graph 이미지 파일 | Open Graph image file |
+| `opengraph-image` | .js .ts .tsx | 생성된 Open Graph 이미지 | Generated Open Graph image |
+| `twitter-image`   | .jpg .jpeg .png .gif | Twitter 이미지 파일 | Twitter image file |
+| `twitter-image`   | .js .ts .tsx | 생성된 Twitter 이미지 | Generated Twitter image |
+
+---
+
+### SEO
+
+| 파일명 | 확장자 | 설명 (한글) | 설명 (영문) |
+|--------|--------|-------------|-------------|
+| `sitemap` | .xml | 사이트맵 파일 | Sitemap file |
+| `sitemap` | .js .ts | 생성된 사이트맵 | Generated Sitemap |
+| `robots`  | .txt | Robots 파일 | Robots file |
+| `robots`  | .js .ts | 생성된 Robots 파일 | Generated Robots file |
+
+### Open Graph Protocol
+
+* 웹사이트나 페이스북, 인스타그램, X(트위터), 카카오톡 등에 링크를 전달할 때 **미리보기**를 생성하는 프로토콜 
+
+* 페이스북이 주도하는 표준화 규칙으로, 대부분의 SNS 플랫폼에서 활용되고 있음 
+
+* 모든 플랫폼이 동일한 방식으로 오픈 그래프를 처리하는 것은 아님
+
+* 웹페이지의 메타 태그에 선언
+
+[코로케이션] Colocation: 파일 및 폴더를 기능별로 그룹화하여 프로젝트의 구조를 명확하게 정의
+
+### 2.Organizing your project
+
+`app` 디렉토리의 파일은 기본적으로 안전하게 코로케이션(co-location) 될 수 있으므로, 비공개 폴더는 불필요. 하지만 다음과 같은 경우에는 유용하게 사용할 수 있음
+
+* UI 로직과 라우팅 로직을 분리
+
+* 프로젝트와 Next.js 생태계 전반에서 내부 파일을 일관되게 구성
+
+* 코드 편집기에서 파일을 정렬하고 그룹화합
+
+* 향후 Next.js 파일 규칙과 관련된 잠재적인 이름 충돌을 방지
+
+### 알아두면 좋은 정보
+
+* 프레임워크 규칙은 아니지만 동일한 밑줄(`_`) 패턴을 사용하여 비공개 폴더 외부의 파일을 "비공개"로 표시하는 것도 고려할 수 있음
+
+* 폴더 이름 앞에 `%5F`(밑줄의 URL 인코딩 형태)를 접두사로 붙여 밑줄로 시작하는 URL 세그먼트를 만들 수 있음
+
+* 비공개 폴더를 사용하지 않는 경우, 예상치 못한 이름 충돌을 방지하기 위해 Next.js의 **특수 파일 규칙**을 아는 것이 좋음
+
+[라우팅 그룹] Route groups
+* 폴더를 괄호로 묶어 라우팅 그루을 만들 수 있음
+
+### src 디렉토리 사용하기 
+
+Next.js에서는 선택적으로 src 디렉토리를 사용하여 애플리케이션의 소스 코드를 프로젝트 설정 파일과 분리할 수 있음
+
+**코드 분리**: `app` 라우터와 같은 모든 소스 코드를 `src` 폴더 안에 배치하여, `package.json`이나 `next.config.js` 같은 최상위 설정 파일들과 명확하게 구분할 수 있음
+
+**선택 사항**: 이 구조는 필수가 아니며 개발자의 선호에 따라 적용할 수 있음
+
+[기능 또는 라우팅 별로 프로젝트 파일 분활] 
+* 이 전략은 전역적으로 공유되는 애플리케이션 코드를 app 디렉토리 루트에 저장하고 보다 구테적인 애플맄케이션 코드를 이를 사용하는 라우팅 세그먼트로 분활
+
+
+
 ## 2025-09-03
 
 ### Installation
