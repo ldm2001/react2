@@ -1,5 +1,69 @@
 # 202030225 이동민 
 
+## 2025-09-17
+
+### git checkout vs git switch 차이
+
+* `checkout`은 브랜치를 이동하고 파일도 바꿀 수 있음 이 때문에 실수할 위험성이 있음
+
+* `switch`는 브랜치만 이동할 수 있기 때문에 안전하게 사용할 수 있음
+
+### 새 branch를 만드는 3가지 방법
+
+```bash
+# 1. 브랜치를 만들고 바로 해당 브랜치로 이동 (권장)
+$ git switch -c <branch-name>
+
+# 2. 브랜치를 만들고 바로 해당 브랜치로 이동
+$ git checkout -b <branch-name>
+
+# 3. 브랜치를 만들기만 하고, 현재 브랜치에 머무름
+$ git branch <branch-name>
+```
+
+### 1. Next.js 페이지 만들기
+
+* Next.js는 파일 시스템 기반 라우팅을 사용 
+
+* 이는 폴더 구조를 통해 웹사이트의 경로가 자동으로 생성된다는 의미
+
+* *페이지(Page): 특정 경로에 해당하는 고유한 UI
+
+### 기본 페이지 생성 방법
+
+페이지를 만들려면, `app` 디렉터리 안에 `page.js` 또는 `page.tsx` 파일을 생성하고 그 안에 React 컴포넌트를 작성한 후 `default export` 해야 함
+
+```tsx
+// app/page.tsx
+export default function Page() {
+  return <h1>Hello, Next.js!</h1>;
+}
+```
+### 레이아웃(Layout) 만들기
+
+* 레이아웃은 여러 페이지에서 공유되는 공통 UI
+
+* 레이아웃은 페이지 이동 시에도 상태와 상호작용을 그대로 유지하며 다시 렌더링되지 않아 사용자 경험을 향상시킴
+
+### 기본 레이아웃 생성 방법
+
+1.  `layout.js` 또는 `layout.tsx` 파일 생성
+    레이아웃을 적용하고 싶은 경로의 폴더에 `layout.tsx` 파일을 생성 
+2.  React 컴포넌트 `default export`
+    파일 안에서 React 컴포넌트를 만들고 `default export` 함
+
+3.  `children` prop 받기
+    레이아웃 컴포넌트는 반드시 **`children` prop**을 인자로 받아야 함 이 `children` prop에는 페이지나 다른 레이아웃 컴포넌트가 들어오게 됨
+
+### URL 세그먼트의 이해
+
+* 중첩 라우트는 다중 URL 세그먼트로 구성된 라우트
+
+### [slug]의 이해 
+
+* slug는 사이트의 특정 페이지를 쉽게 읽을 수 있는 형태로 식별하는 url의 일부
+
+
 ## 2025-09-10
 
 ### Folder and file conventions (폴더 및 파일 규칙)
