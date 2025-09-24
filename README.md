@@ -1,5 +1,33 @@
 # 202030225 이동민 
 
+## 2025-09-24
+
+### searchParams란?
+
+* URL의 쿼리 문자열을 읽는 방법
+* 예시: `/products?category=shoes&page=2`
+* 여기서 `category=shoes`, `page=2`가 search parameters
+* App Router에서 searchParams은 다음과 같이 사용 가능
+
+```javascript
+export default function ProductsPage({ searchParams }) {
+return <p>카테고리: {searchParams.category}</p>;
+}
+```
+* searchParams은 컴포넌트의 props로 전달되며 내부적으로는 URLSearchParams처럼 작동
+
+### 왜 "동적 렌더링"이 되는가?
+
+* Next.js에서 페이지는 크게 정적 또는 동적으로 렌더링될 수 있음
+* `searchParams`는 요청이 들어와야만 값을 알 수 있기 때문에 Next.js는 이 페이지를 정적으로 미리 생성할 수 없고 요청이 올 때마다 새로 렌더링해야 함
+*  해당 페이지는 자동으로 동적 렌더링으로 처리
+
+### Linking between pages (페이지 간 연결)
+
+* <Link> 컴포넌트를 사용하여 경로 사이를 탐색  
+* <Link>는 HTML `<a>` 태그를 확장하여 prefetching 및 client-side navigation 기능을 제공하는 Next.js의 기본제공 컴포넌트 
+> Prefetching은 사용자가 해당 경로로 이동되기 전에 백그라운드에서 선택 경로를 미리 로딩하는 프로세스  
+
 ## 2025-09-17
 
 ### git checkout vs git switch 차이
