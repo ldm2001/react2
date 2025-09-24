@@ -28,6 +28,11 @@ return <p>카테고리: {searchParams.category}</p>;
 * <Link>는 HTML `<a>` 태그를 확장하여 prefetching 및 client-side navigation 기능을 제공하는 Next.js의 기본제공 컴포넌트 
 > Prefetching은 사용자가 해당 경로로 이동되기 전에 백그라운드에서 선택 경로를 미리 로딩하는 프로세스  
 
+### Server Rendering
+ 
+* Next.js에서 레이아웃과 페이지는 기본적으로 리액트 서버 컴포넌트
+* 초기 네비게이션 및 후속 네비게이션 할 떄 서버 컴포넌트 페이로드는 클라이언트로 전송되기 전에 서버에서 생성
+
 ## 2025-09-17
 
 ### git checkout vs git switch 차이
