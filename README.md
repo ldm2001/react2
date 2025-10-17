@@ -1,5 +1,61 @@
 # 202030225 이동민 
 
+## 2025-10-17
+
+### 서버와 클라이언트 소개
+
+* 기본으로 레이아웃과 페이지는 서버 컴포넌트
+* 서버에서 데이터를 가져와 UI의 일부를 렌더링할 수 있고, 선택적으로 결과를 캐시한 후 클라이언트로 스트리밍할 수 있음
+* 상호작용이나 브라우저 API가 필요한 경우 클라이언트 컴포넌트를 사용하여 기능을 계층화 할 수 있음
+
+### 서버와 클라이언트 사용
+* 서버 및 클라이언트 컴포넌트를 사용하면 사용하는 사례에 따라 각각의 환경에서 필요한 로직을 실행할 수 있음
+
+* 다음과 같은 항목이 필요할 경우에는 클라이언트 컴포넌트를 사용
+    * `state`및 `event handler` 예: `onClick`, `onChange`
+    * `Lifecycle logic` 예: `useEffect`
+    * 브라우저 사용 API 예: `localStorage`, `window` 등
+    * 사용자 정의 Hook
+
+* 다음과 같은 항목이 필요할 경우에는 서버 컴포넌트를 사용
+    * 서버의 DB 혹은 API에서 데이터를 가져오는 경우 사용
+    * API 키, 토큰 및 기타 보안 데이터를 클라이언트에 노출하지 않고 사용
+    * 브라우저로 전송되는 자바스크립트의 양을 줄이고 싶을 때 사용
+    * 컨텐츠가 포함된 첫번쨰 페인트(First Contentful Paint_FCP)를 개선하고 컨텐츠를 클라이언트에 점진적으로 스트링밍 함
+
+```TypeScript
+// app/posts/[id]/page.tsx
+import LikeButton from '@/ui/like-button'
+import { getPost } from '@/lib/posts'
+
+export default async function Page({ params }: { params: { id: string } }) {
+  const post = await getPost(params.id)
+
+  return (
+    <div>
+      <h1>{post.title}</h1>
+      <p>{post.content}</p>
+      <LikeButton likes={post.likes} />
+    </div>
+  )
+}
+```
+* 예를 들어 <Page> 컴포넌트는 게시물에 대한 데이터를 가져와서 클라이언트 측 상호 작용을 처리하는 <LikeButton>에 props로 전달하는 서버 컴포넌트
+
+```TypeScript
+// ui/like-button.tsx
+'use client'
+
+import { useState } from 'react'
+
+export default function LikeButton({ likes }: { likes: number }) {
+  const [count, setCount] = useState(likes)
+}
+```
+* ui/like-button은 클라이언트 컴포넌이기 때문에 use client를 사용
+
+
+
 ## 2025-10-01
 
 ### Client-side transitions (클라이언트 측 전환)
@@ -57,8 +113,6 @@
     - 브라우저의 기록 스택에서 현재 항목을 바꾸려면 이 기능을 사용
     - 사용자는 이전 상태로 돌아갈 수 없음
     - 예를 들어 애플리케이션의 로케일을 전환하는 경우
-
-
 
 ## 2025-09-24
 
