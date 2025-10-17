@@ -133,8 +133,7 @@ export default function LikeButton({ likes }: { likes: number }) {
 * 파일에 `"use client"`로 표시된 해당 파일의 모든 import와 자식 컴포넌트는 클라이언트 번들의 일부로 간주
 * 즉 클라이언트 대상으로 하는 모든 컴포넌트에 이 지시문을 추가할 필요가 없음
 
-```javascript
-// app/router.tsx
+```TypeScript
 'use client'
 
 import { useState } from 'react'
@@ -144,12 +143,22 @@ export default function Counter() {
   
   return (
     <div>
-      <p>{count} likes/s</p>
+      <p>{count} likes</p>
       <button onClick={() => setCount(count + 1)}>Click me</button>
     </div>
   )
 }
 ```
+
+### JS bundle 크기 줄이기
+
+*클라이언트 자바스크립트 번들의 크기를 줄이면 바의 큰 부분을 클라이언트 컴포넌트로 표시하는 대신 특정 \ "use client"를 추가합니다.
+
+• 예를 들어, 다른 메뉴의 <Layout> component는 로고와 링크와 같은 정적 요소가 대부분이지만 대화형 검색창이 포함되어 있습니다.
+
+• <Search />는 대화형이기 때문에 client component가 되어 하지만, 나머지 layout은 server component로 유지할 수 있습니다.
+  
+  **※ 나머지 layout은 server component로 유지해야 합니다**
 
 ## 2025-10-01
 
