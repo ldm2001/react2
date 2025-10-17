@@ -9,6 +9,7 @@
 * 상호작용이나 브라우저 API가 필요한 경우 클라이언트 컴포넌트를 사용하여 기능을 계층화 할 수 있음
 
 ### 서버와 클라이언트 사용
+
 * 서버 및 클라이언트 컴포넌트를 사용하면 사용하는 사례에 따라 각각의 환경에서 필요한 로직을 실행할 수 있음
 
 * 다음과 같은 항목이 필요할 경우에는 클라이언트 컴포넌트를 사용
@@ -54,7 +55,101 @@ export default function LikeButton({ likes }: { likes: number }) {
 ```
 * ui/like-button은 클라이언트 컴포넌이기 때문에 use client를 사용
 
+### Optimistic Update (낙관적 업데이트)
 
+* 사용자의 이벤트(예: 좋아요 버튼 클릭)가 발생하면 서버 응답을 기다리지 않고 클라이언트(브라우저)를 즉시 변경(업데이트)함
+* 서버에 보낸 요청의 성공을 낙관(optimistic)한다고 가정해서, 먼저 화면에 변화를 보여줌
+* 서버에서 응답이 없으면 UI를 원래 상태로 되돌림(rollback)
+* 네트워크 지연 등 상황에서도 앱이 빠르게 반응하도록 느끼게 하는 것이 목적
+
+* 장점 
+    * 서버 응답 속도와 관계없이 즉각적인 피드백을 제공하여 사용자 경험을 향상시킴
+    * 네트워크 상태가 나쁘거나 응답 시간이 길어도 사용자가 체감하는 속도가 빠름
+
+* 단점
+    * 서버에서 오류가 발생하면 사용자에게는 잠시 동안 잘못된 정보가 표시될 수 있음
+    * 오류 발생시 복구(rollback) 로직이 필요
+
+### Pessimistic Update (비관적 업데이트)
+
+* 이벤트가 발생하면 먼저 서버에 요청을 보내고 서버에서 성공 응답을 받은 후에 클라이언트의 UI를 업데이트 함
+
+* 장점
+    * 서버의 응답을 기반으로 하기 때문에 데이터의 일관성이 보장
+    * 오류가 발생할 가능성이 낮고 잘못된 정보가 표시될 염려가 없음
+
+* 단점
+    * 사용자는 서버의 응답을 기다려야 하므로 응답이 늦어지면 사용자 경험이 저하될 수 있음
+    * 특히 네트워크 지연이 발생할 경우 체감 속도가 느려짐
+
+### Null 병합 연산자 (Nullish Coalescing Operator)
+
+* 왼쪽 피연산자가 null 또는 undefined이면 오른쪽 값을 반환하고 그렇지 않으면 왼쪽 값을 그대로 반환
+
+### or 연산자(`||`)와는 어떤 차이가 있을까?
+
+* or 연산자는 falsy 값(`false`, `0`, `""`, `null`, `undefined` 등)을 모두 오른쪽 값으로 대체
+
+### Next.js에서 서버와 클라이언트 컴포넌트는 어떻게 작동할까?
+
+### 서버 컴포넌트의 작동
+
+* 서버에서 Next.js는 React의 API 사용하여 렌더링 조정
+* 렌더링 작업은 개별 콘텐츠 세그먼트 별 묶음(Chunk)으로 나뉨 (layout 및 page)
+* 서버 컴포넌트는 RSC Payload(React Server Component Payload)라는 특수한 데이터 형식으로 전송
+- 클라이언트 컴포넌트 와 RSC Payload는 HTML을 미리 렌더링(prerender)하는 사용
+
+### React Server Component Payload (RSC) 
+* RSC 페이로드는 렌더링된 React server component 트리의 암축된 바이너리 표현
+* 클라이언트에서 리액트가 브라우저의 DOM에 업데이트 하는데 사용
+
+### RSC(RSC Payload)는 Json인가? 바이너리인가?
+
+* 과거: Json 기반 
+    * RSC 초기에는 JSON 형식의 문자열로 데이터를 전달
+    * 예 : `{ type: "component", props: { title: "Hello" } }`
+
+* 현재: 바이너리 형식으로 최적화
+    * 최신 리액트, 특히 Next.js App Router는 RSC payload를 compact binary format으로 전송
+    * JSON이 아니며 리액트 전용 이진 포맷으로 스트림(stream)을 통해 전달
+    * 이 방식은 Json보다 용량이 작고 빠르게 전송할 수 있음
+
+### 클라이언트 컴포넌트의 작동(첫 번째 load)
+
+* HTML은 사용자에게 경로(라우팅 페이지)의 비대화형 미리보기를 즉시 보여주는데 사용
+* RSC 페이로드는 클라이언트와 서버 컴포넌트 트리를 조정하는데 사용
+* 자바스크립트는 클라이언트 컴포넌트를 hydration하고 애플리케이션을 대화형으로 만드는데 사용
+  > Hydration: 이벤트 핸들러를 DOM에 연결하여 정적 HTML을 인터랙티브하게 만드는 React의 프로세스
+
+### 후속 네비게이션
+
+* 후속 탐색을 할 때 RSC 페이로드는 즉시 탐색할 수 있도록 prefetch 및 cache 됨
+* 클라이언트 컴포넌트는 서버에서 렌더링된 HTML 없이 전적으로 클라이언트에서 렌더링 됨
+
+### 클라이언트 컴포넌트 사용
+
+* 파일의 맨 위 즉 import문 위에 `"use client"` 지시문을 추가하여 클라이언트 컴포넌트를 생성할 수 있음
+* `"use client"`는 서버와 클라이언트 모듈 트리 사이의 경계를 선언하는 데 사용
+* 파일에 `"use client"`로 표시된 해당 파일의 모든 import와 자식 컴포넌트는 클라이언트 번들의 일부로 간주
+* 즉 클라이언트 대상으로 하는 모든 컴포넌트에 이 지시문을 추가할 필요가 없음
+
+```javascript
+// app/router.tsx
+'use client'
+
+import { useState } from 'react'
+
+export default function Counter() {
+  const [count, setCount] = useState(0)
+  
+  return (
+    <div>
+      <p>{count} likes/s</p>
+      <button onClick={() => setCount(count + 1)}>Click me</button>
+    </div>
+  )
+}
+```
 
 ## 2025-10-01
 
