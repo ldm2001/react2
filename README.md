@@ -1,5 +1,30 @@
 # 202030225 이동민 
 
+## 2025-10-22
+
+### 서버 및 클라이언트 컴포넌트 인터리빙
+
+* 인터리빙(Interleaving)은 일반적으로 여러 데이터 블록이나 비트를 섞어서 전송하거나 처리하여 오류 발생 시 성능을 최적화하는 기술
+* 특히 데이터 통신이나 버스트 오류(연속적인 오류)를 줄이고 오류 정정 코드를 효과적으로 사용하기 위해 버스트 오류를 분산시키기 위해 사용
+* 프론트엔드나 문서에서는 서버 컴포넌트와 클라이언트 컴포넌트가 섞여서(interleaved) 존재하는 것을 의미
+    * server_component를 client_component의 prop로 통해 전달할 수 있음
+    * 이를 통해 client_component 내에서 server에서 렌더링된 Ui를 시각적으로 중첩할 수 있음
+    * <ClientComponent>의 공간(slot)을 만드로 children을 개념으로 패턴이 일반적임
+
+```typescript
+import ClientComponent from './ClientComponent'
+
+export default function Page() {
+  return (
+    <ClientComponent>
+      <ServerComponent />
+    </ClientComponent>
+  )
+}
+```
+
+
+
 ## 2025-10-17
 
 ### 서버와 클라이언트 소개
