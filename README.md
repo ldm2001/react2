@@ -23,6 +23,43 @@ export default function Page() {
 }
 ```
 
+### Context란 무엇인가?
+
+* Next.js에서 Context는 React의 Context API를 사용하여 컴포넌트 사이에 데이터를 공유하는 메커니즘을 의미
+* 부모 컴포넌트에서 자식 컴포넌트로 직접 props를 전달하지 않고도 특정 데이터를 필요한 컴포넌트에서 쉽게 접근하고 사용할 수 있도록 도와줌
+
+### [ Context의 주요 특징 ]
+
+* 전역 상태 관리
+  * Context를 사용하면 애플리케이션 전체에서 공유해야 하는 데이터를 중앙 집중적으로 관리할 수 있음 (예: 사용자 정보, 테마 설정 등)
+* props drilling 문제 해결
+  * 컴포넌트 계층이 깊을 때, 각 컴포넌트를 props를 계속 전달받아 하는 번거로움을 줄여줌
+  * Context를 사용하면 필요한 컴포넌트에서 바로 데이터를 가져올 수 있으므로 코드의 가독성을 높이고 유지 보수 용이
+* 리액트 컴포넌트에서 사용
+  * Context는 리액트에서 제공하는 기능이기 때문에 Next.js에서도 리액트 컴포넌트를 사용하여 구현
+
+### Context provider (컨텍스트 제공자)
+
+* 리액트 Context는 일반적으로 아래 테마처럼 전역 상태를 공유하는데 사용
+* 그러나 서버 컴포넌트에서는 리액트 Context가 지원되지 않음
+* Context를 사용하려면 children을 허용하는 클라이언트 컴포넌트로 만들어야 함
+
+```typescript
+'use client'
+
+import { createContext } from 'react'
+
+export const ThemeContext = createContext({})
+
+export default function ThemeProvider({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return <ThemeContext.Provider value="dark">{children}</ThemeContext.Provider>
+}
+```
+
 
 
 ## 2025-10-17
