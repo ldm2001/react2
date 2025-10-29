@@ -28,8 +28,59 @@ export default function Page() {
     </div>
   )
 }
-
 ```
+
+### 환경 변수 노출 예방
+
+* 자바스크립트 모듈은 서버 및 클라이언트 컴포넌트 모듈 간에 공유될 수 있음
+- 이는 실수로 서버 전용 코드를 클라이언트로 가져올 수도 있다는 뜻
+
+```TypeScript
+// lib/data.ts
+export async function getData() {
+  const res = await fetch('https://external-service.com/data', {
+    headers: {
+      authorization: process.env.API_KEY,
+    },
+  });
+
+  return res.json();
+}
+```
+### Fetching Data (데이터 가져오기)
+
+* 서버 컴포넌트에서 데이터를 가져올 수 있는 방법
+  * 1. fetch API
+  * 2. ORM 또는 데이터베이스
+
+* 데이터를 가져오려면 fetch API를 사용하여 컴포넌트를 비동기식 함수로 변환하고 다음 fetch 호출을 기다림
+
+```ts
+// app/blog/page.tsx
+export default async function Page() {
+  const data = await fetch('https://api.vercel.app/blog')
+  const posts = await data.json()
+  return (
+    <ul>
+      {posts.map((post) => (
+        <li key={post.id}>{post.title}</li>
+      ))}
+    </ul>
+  )
+}
+```
+
+### 클라이언트 컴포넌트
+
+* 클라이언트 컴포넌트에서 데이터를 가져오는 방법에는 두 가지가 있음
+  * React의 **`use` Hook**
+  * **SWR** 또는 **React Query**와 같은 통신 라이브러리
+
+* React의 **`use` Hook**을 사용해서 서버에서 클라이언트로 데이터를 스트리밍함
+* 서버 컴포넌트에서 데이터를 먼저 `fetch()`하고, 그 결과(`promise`)를 클라이언트 컴포넌트에 `prop`으로 전달
+* 서버 컴포넌트는 `async`가 가능하기 때문에 `await fetch()`도 사용할 수 있음
+* 하지만 클라이언트 컴포넌트에서는 `async`가 불가능하기 때문에 직접 `fetch`가 불가능
+* 이런 이유로 서버에서 `fetch`한 결과를 `prop`으로 넘기고 클라이언트에서는 **`use(promise)`를 써서 데이터를 가져옴
 
 ## 2025-10-22
 
