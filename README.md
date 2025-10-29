@@ -1,5 +1,36 @@
 # 202030225 이동민 
 
+## 2025-10-29
+
+### TypeScript의 유니온 타입(Union Type)이란
+
+* '|'(파이프)로 여러 타입을 연결해서 "이 값은 각각의 타입 중 하나가 될 수 있다"는 것을 지정
+* 코드에서 문자열 리터럴 유니온 타입의 경우 state 값으로 'Light' 또는 'dark'만 설정할 수 있어 코드 자동완성과 타입 안정성이 향상
+
+###  외부(서드 파티) 컴포넌트
+
+* 클라이언트 전용 기능에 의존하는 외부 컴포넌트를 사용하는 경우 해당 컴포넌트를 클라리언트 컴포넌트에 래핑하면 예상대로 작동하는지 확인할 수 있음
+* 예를 들어 `<Carousel />` 은 `acme-carousel` 패키지에서 불러올 수 있음
+* 이 컴포넌트는 `useState`를 사용하지만 `"use client"` 지시문은 없음
+* 클라이언트에서 `<Carousel />`을 사용하면 예상대로 작동
+* 그러나 서버 컴포넌트 내에서 직접 사용하려고 하면 오류가 발생
+*  Next.js가 `<Carousel />`이 클라이언트 전용 기능을 사용하고 있다는 것을 알지 못하기 때문
+* 이 문제를 해결하려면 클라이언트 전용 기능에 의존하는 외부 컴포넌트를 자체 클라이언트 컴포넌트로 래핑할 수 있음
+```TypeScript
+// page.tsx (Server Component)
+import Carousel from './CarouselWrapper'
+
+export default function Page() {
+  return (
+    <div>
+      {/* Works, since Carousel is a Client Component */}
+      <Carousel />
+    </div>
+  )
+}
+
+```
+
 ## 2025-10-22
 
 ### 서버 및 클라이언트 컴포넌트 인터리빙
