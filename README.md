@@ -1,5 +1,91 @@
 # 202030225 이동민 
 
+## 2025-11-05
+
+###  Fetching Data (데이터 가져오기) - 서버 컴포넌트
+
+* 서버 컴포넌트에서 데이터를 fetch하는 방법 두 가지
+  1. fetch API
+  2. ORM 또는 데이터베이스
+
+### [ 1. fetch API 사용 ]
+
+* 데이터를 가져오려면 fetch API를 사용하여 컴포넌트를 비동기식 함수로 변환하고 다음 fetch의 호출을 대기
+
+```tsx
+// app/blog/page.tsx
+export default async function Page() {
+  const data = await fetch('https://api.vercel.app/blog')
+  const posts = await data.json()
+  return (
+    <ul>
+      {posts.map((post) => (
+        <li key={post.id}>{post.title}</li>
+      ))}
+    </ul>
+  )
+}
+```
+
+## [ 2. ORM 또는 데이터베이스를 사용 ]
+
+* 서버 컴포넌트는 서버에서 렌더링 되기 때문에 ORM이나 데이터베이스 클라이언트를 사용해서 안전하게 데이터베이스 쿼리를 실행할 수 있음
+* 컴포넌트를 비동기 함수로 변환하고 호출을 대기
+
+```tsx
+import { db, posts } from '@/lib/db'
+
+export default async function Page() {
+  const allPosts = await db.select().from(posts)
+  return (
+    <ul>
+      {allPosts.map((post) => (
+        <li key={post.id}>{post.title}</li>
+      ))}
+    </ul>
+  )
+}
+```
+
+### 데이터 가져오기 (Fetching Data) - 클라이언트 컴포넌트
+
+* 클라이언트 컴포넌트에서 데이터를 fetch하는 방법 두 가지
+  1. React의 use Hook
+  2. SWR 또는 리액트 쿼리와 같은 동신 라이브러리
+
+### [ 1. use Hook을 사용한 스트리밍 데이터 ]
+
+* 리액트의 use Hook을 사용하여 서버에서 클라이언트로 데이터를 스트리밍
+* 서버 컴포넌트에서 데이터를 먼저 fetch하고 그 결과를 클라이언트 컴포넌트에 prop으로 전달
+* 서버 컴포넌트는 async가 가능하기 때문에 `await fetch()`도 사용 가능
+* 하지만 클라이언트 컴포넌트에서는 async가 불가능하기 때문에 직접 fetch가 불가능
+* 이런 이유 때문에 서버에서 fetch한 결과를 prop으로 넘기고 클라이언트에서는 `use(promise)`를 써서 데이터를 가져옴
+
+### 제네릭(T)을 사용하여 반환 값의 타입을 명시적으로 지정
+
+```ts
+// before
+const fetcher = (url: string) => fetch(url).then((r) => r.json())
+
+// after
+const fetcher = <T>(url: string): Promise<T> =>
+  fetch(url).then((r) => r.json())
+```
+
+* 제네릭 <T,>를 사용하여 타입 변수 T를 도입
+* 환 타입을 Promise<T>로 명시적으로 지정
+* 이렇게 하면 함수를 호출할 때 원하는 타입을 지정하여 타입 안전하게 사용할 수 있음
+* 다만 예제 코드에서 위와 같이 수정하면 데이터에서 오류가 발생할 수 있음
+
+### 중복된 요청 제거 및 데이터 캐시
+
+* 중복된 fetch 요청을 제거하는 한 가지 방법은 요청 메모이제이션(request memoization)을 사용
+* 같은 데이터를 여러 번 요청하지 않게 하려면 요청 메모이제이션(request memoization)을 사용할 수 있다는 의미
+* 이 메커니즘(요청 메모이제이션)을 사용하면 하나의 렌더링 과정(single render pass) 안에서 같은 URL과 옵션을 가진 GET 또는 HEAD 방식의 fetch 호출들을 하나의 요청으로 결합
+* 렌더링 중에 같은 주소와 설정으로 여러 번 fetch()를 호출하더라도 Next.js는 그것을 하나의 네트워크 요청으로 통합해서 처리
+* 이 작업은 자동으로 수행되며 fetch에 Abort 신호를 전달하면 작업을 취소(opt out) 할 수 있음
+* 요청 메모이제이션은 요청의 수명에 따라 범위가 지정
+
 ## 2025-10-29
 
 ### TypeScript의 유니온 타입(Union Type)이란
