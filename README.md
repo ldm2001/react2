@@ -1,5 +1,52 @@
 # 202030225 이동민 
 
+## 2025-11-12
+
+### 스트리밍
+
+> 경고(Warning)
+* 아래 내용은 애플리케이션에서 cacheComponents config 옵션이 활성화되어 있다고 가정 
+* 이 플래그는 Next.js 15 Canary에서 도입  
+* 참고로 Next.js의 배포 채널은 latest와 canary 두 가지
+* latest는 현재 가장 최신 안정 버전 canary는 안정화 직전의 최신 개발 버전을 의미
+
+### `loading.tsx`를 사용하는 방법
+
+* 애플리케이션에서 스트리밍을 구현하는 방법은 두가지
+    - `loading.tsx` 파일로 페이지 감싸기
+    - <Suspense>로 컴포넌트 감싸기
+
+```TypeScript
+import { Suspense } from 'react';
+import BlogList from '@/components/BlogList';
+import BlogListSkeleton from '@/components/BlogListSkeleton';
+
+export default function BlogPage() {
+  return (
+    <div>
+      {/* This content will be sent to the client immediately */}
+      <header>
+        <h1>Welcome to the Blog</h1>
+        <p>Read the latest posts below.</p>
+      </header>
+
+      <main>
+        {/* Any content wrapped in a <Suspense> boundary will be streamed */}
+        <Suspense fallback={<BlogListSkeleton />}>
+          <BlogList />
+        </Suspense>
+      </main>
+    </div>
+  );
+}
+```
+
+### 의미 있는 로딩 상태 생성
+
+* 즉시 로딩 상태는 탐색(접속) 후 사용자에게 즉시 표시되는 대체 UI
+* 즉시 로딩 상태(instant loading state)란 `loading.tsx` 파일을 추가하여 폴더 내에 로딩 상태를 생성하는 것을 의미
+* 최상의 사용자 경험을 위해, 앱의 응답을 사용자가 쉽게 이해할 수 있도록 의미 있는 로딩 상태를 디자인하는 것이 좋음
+
 ## 2025-11-05
 
 ###  Fetching Data (데이터 가져오기) - 서버 컴포넌트
