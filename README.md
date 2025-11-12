@@ -47,6 +47,34 @@ export default function BlogPage() {
 * 즉시 로딩 상태(instant loading state)란 `loading.tsx` 파일을 추가하여 폴더 내에 로딩 상태를 생성하는 것을 의미
 * 최상의 사용자 경험을 위해, 앱의 응답을 사용자가 쉽게 이해할 수 있도록 의미 있는 로딩 상태를 디자인하는 것이 좋음
 
+### 4-2. 병렬 데이터 fetch
+
+* 경로 내의 데이터 요청이 동시에 발생할 때 병렬 데이터 가져오기가 발생
+* 기본적으로 레이아웃과 페이지는 병렬로 렌더링. 따라서 각 세그먼트는 가능한 빨리 데이터 fetch를 시작
+* 다만 컴포넌트 내부에서 여러 개의 async/await 요청이 서로 의존하거나 다른 요청 뒤에 배치되면 결과적으로 순차 처리가 될 수 있음
+
+```tsx
+// app/artist/[username]/page.tsx
+import { getArtist, getAlbums } from '@/app/lib/data';
+
+export default async function Page({ params }: { params: { username: string } }) {
+  // These requests will be sequential
+  const { username } = params;
+  const artist = await getArtist(username);
+  const albums = await getAlbums(username);
+
+  return <div>{artist.name}</div>;
+}
+```
+
+
+
+### 데이터 사전 로딩 개요
+
+* 차단 요청 전에 사전 로드(preload) 하는 유틸리티 함수를 만들어 데이터를 미리 가져올 수 있음
+* <Item>은 checkIsAvailable() 함수 결과에 따라 조건부 렌더링됨
+* checkIsAvailable()를 호출하기 전에 preload()를 먼저 실행하면 <Item>의 데이터 종속성을 미리 초기화할 수 있음
+
 ## 2025-11-05
 
 ###  Fetching Data (데이터 가져오기) - 서버 컴포넌트
