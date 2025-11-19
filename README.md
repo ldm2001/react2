@@ -1,5 +1,96 @@
 # 202030225 이동민 
 
+## 2025-11-19
+
+### CSS Modules
+
+* CSS 모듈은 고유한 클래스 이름을 생성하여 CSS의 범위를 로컬로 지정
+* 이를 통해 이름 충돌에 대한 걱정 없이 다른 파일에서 동일한 클래스를 사용할 수 있음
+
+---
+
+* CSS 모듈 사용을 시작하려면 `.module.css`*확장자가 있는 새 파일을 만들고 app 디렉터리의 컴포넌트로 가져옴
+
+```css
+.blog {
+  padding: 24px;
+}
+```
+
+```TypeScript
+import styles from './blog.module.css';
+
+export default function Page() {
+  return <main className={styles.blog}></main>;
+}
+```
+
+### Global(전역) CSS
+
+* `app/global.css` 파일을 만들고 루트 레이아웃으로 가져와  
+  애플리케이션의 모든 경로에 스타일을 적용
+* `RootLayout`은 앞에서 작성한 것과 동일
+
+```css
+body {
+  padding: 20px 20px 60px;
+  max-width: 680px;
+  margin: 0 auto;
+}
+```
+```TypeScript
+import './global.css';
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  );
+}
+```
+
+###  Next.js에서 추천하는 스타일링 방법
+
+* Tailwind는 컴포넌트 단위 스타일 작성에 최적화되어 있음
+1. `margin` / `padding`
+2. `flex` / `grid` 레이아웃
+3. `border`, `color`, `hover`, `transition`
+4. 반응형 클래스 등
+
+* 대부분의 컴포넌트는 Tailwind로 스타일링을 할 경우 생산성을 향상시키고 빠른 유지보수에도 유리
+
+### 외부 스타일시트
+
+* 외부 패키지로 제공되는 스타일시트는 `app` 디렉토리의 컴포넌트를 포함하여 어느 곳에서나 `import`해서 사용할 수 있음
+* `src` 디렉토리를 사용하는 경우라면 `src` 디렉토리의 어느 곳에서나 사용할 수 있다는 의미
+
+```tsx
+import 'bootstrap/dist/css/bootstrap.css';
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body className="container">{children}</body>
+    </html>
+  );
+}
+```
+
+### Bootstrap
+
+* Blog2Page에 Bootstrap을 `import`하지 않아도 사용할 수 있음
+*  Blog2Layout에 import하는 것만으로 해당 디렉토리 및 하위 디렉토리 전체에 사용이 가능하기 때문
+
+
 ## 2025-11-12
 
 ### 스트리밍
